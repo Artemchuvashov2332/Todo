@@ -18,20 +18,17 @@ export function SearchForm() {
     setSearchInputValue('');
   };
 
-  const submitFormHandler = (evt: MouseEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-  };
-
   const changeTaskStatus = (taskStatus: FiltersType) => {
     setFilterType(taskStatus);
   };
 
   const submitHandler = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
     console.log(`Поиск в категории ${filterType} ${searchInputValue}`);
   };
 
   return (
-    <form className="search-form d-flex justify-content-between" onSubmit={submitFormHandler}>
+    <form className="search-form d-flex justify-content-between">
       <SearchInput onChange={changeHandler} value={searchInputValue} onReset={resetHandler} />
       <SearchFilter onChange={changeTaskStatus} selectTypeTask={filterType} />
       <button type="submit" className="btn btn-primary" onClick={submitHandler}>
