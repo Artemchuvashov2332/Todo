@@ -1,11 +1,13 @@
 import React, { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react';
+import { taskAddStoreInstance } from './store/index';
 import { TextField } from 'components/TextField';
-import { TasksMock } from '__mocks__/Tasks.mock';
 import { Checkbox } from 'components/Checkbox';
 import { PATH_LIST } from 'constants/paths';
+import { Loader } from 'components/index';
 
-export function TaskAddForm() {
+function TaskAddFormProto() {
   const [taskNameValue, setTaskNameValue] = useState('');
   const [taskDescriptionValue, setTaskDescriptionValue] = useState('');
   const [taskIsImportant, setTaskIsImportant] = useState(false);
@@ -23,18 +25,15 @@ export function TaskAddForm() {
     setTaskIsImportant(value);
   };
 
-  const onSubmitTaskFors = (evt: MouseEvent<HTMLButtonElement>) => {
+  const onSubmitTaskFors = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    TasksMock.push({
-      id: `${Date.now()}`,
+    const res = await taskAddStoreInstance.postTask({
       name: taskNameValue,
       info: taskDescriptionValue,
       isImportant: taskIsImportant,
-      isDone: false,
     });
-    console.log(TasksMock[TasksMock.length - 1]);
 
-    navigate(PATH_LIST.ROOT);
+    if (res) navigate(PATH_LIST.ROOT);
   };
 
   return (
@@ -55,8 +54,12 @@ export function TaskAddForm() {
       />
       <Checkbox label="Important" checked={taskIsImportant} onChange={onTaskImportant} />
       <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
-        Add task
+        <Loader isLoading={taskAddStoreInstance.isLoader} variant="dot">
+          Add task
+        </Loader>
       </button>
     </form>
   );
 }
+
+export const TaskAddForm = observer(TaskAddFormProto);

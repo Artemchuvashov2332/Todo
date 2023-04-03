@@ -1,25 +1,34 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { observer } from 'mobx-react';
+import { taskEditStoreInstance } from './store/index';
 import { TextField } from 'components/TextField';
-import { TasksMock } from '__mocks__/Tasks.mock';
 import { Checkbox } from 'components/Checkbox';
 import { PATH_LIST } from 'constants/paths';
+import { Loader } from 'components/index';
+import './TaskEditForm.css';
 
-export function TaskEditForm() {
+function TaskEditFormProto() {
   const [taskNameValue, setTaskNameValue] = useState('');
   const [taskDescriptionValue, setTaskDescriptionValue] = useState('');
   const [taskIsImportant, setTaskIsImportant] = useState(false);
   const [taskIsCompleted, setTaskIsCompleted] = useState(false);
   const { taskId } = useParams();
   const navigate = useNavigate();
-  const taskindex = TasksMock.findIndex((task) => task.id === taskId);
 
   useEffect(() => {
-    setTaskNameValue(TasksMock[taskindex].name);
-    setTaskDescriptionValue(TasksMock[taskindex].info);
-    setTaskIsImportant(TasksMock[taskindex].isImportant);
-    setTaskIsCompleted(TasksMock[taskindex].isDone);
+    taskEditStoreInstance.taskId = taskId ?? null;
+    if (taskEditStoreInstance.taskId) {
+      taskEditStoreInstance.getTask();
+    }
   }, []);
+
+  useEffect(() => {
+    setTaskNameValue(taskEditStoreInstance.taskFormData.name);
+    setTaskDescriptionValue(taskEditStoreInstance.taskFormData.info);
+    setTaskIsImportant(taskEditStoreInstance.taskFormData.isImportant);
+    setTaskIsCompleted(taskEditStoreInstance.taskFormData.isDone);
+  }, [taskEditStoreInstance.taskFormData]);
 
   const onTaskNameChange = (text: string) => {
     setTaskNameValue(text);
@@ -39,36 +48,43 @@ export function TaskEditForm() {
 
   const onSubmitTaskFors = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    TasksMock[taskindex].name = taskNameValue;
-    TasksMock[taskindex].info = taskDescriptionValue;
-    TasksMock[taskindex].isImportant = taskIsImportant;
-    TasksMock[taskindex].isDone = taskIsCompleted;
-    console.log(TasksMock[taskindex]);
+    taskEditStoreInstance.editTask({
+      name: taskNameValue,
+      info: taskDescriptionValue,
+      isImportant: taskIsImportant,
+      isDone: taskIsCompleted,
+    });
 
     navigate(PATH_LIST.ROOT);
   };
 
   return (
-    <form>
-      <TextField
-        label="Task name"
-        placeholder="Enter the name of the task"
-        inputType="text"
-        onChange={onTaskNameChange}
-        value={taskNameValue}
-      />
-      <TextField
-        label="Task description"
-        placeholder="What do you want to do"
-        inputType="text"
-        onChange={onTaskDescriptionChange}
-        value={taskDescriptionValue}
-      />
-      <Checkbox label="Important" checked={taskIsImportant} disabled={taskIsCompleted} onChange={onTaskImportant} />
-      <Checkbox label="Complited" checked={taskIsCompleted} disabled={taskIsImportant} onChange={onTaskCompleted} />
-      <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
-        Edit task
-      </button>
-    </form>
+    <div className="form-container d-flex align-items-center justify-content-center">
+      <Loader isLoading={taskEditStoreInstance.isLoader} variant="circle">
+        <form className="w-100">
+          <TextField
+            label="Task name"
+            placeholder="Enter the name of the task"
+            inputType="text"
+            onChange={onTaskNameChange}
+            value={taskNameValue}
+          />
+          <TextField
+            label="Task description"
+            placeholder="What do you want to do"
+            inputType="text"
+            onChange={onTaskDescriptionChange}
+            value={taskDescriptionValue}
+          />
+          <Checkbox label="Important" checked={taskIsImportant} disabled={taskIsCompleted} onChange={onTaskImportant} />
+          <Checkbox label="Complited" checked={taskIsCompleted} disabled={taskIsImportant} onChange={onTaskCompleted} />
+          <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
+            Edit task
+          </button>
+        </form>
+      </Loader>
+    </div>
   );
 }
+
+export const TaskEditForm = observer(TaskEditFormProto);

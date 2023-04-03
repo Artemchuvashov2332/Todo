@@ -1,17 +1,30 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Task } from '../Task';
-import { TaskListProps } from './TasksList.types';
+import { taskStoreInstance } from 'modules/Tasks/store';
+import { Loader } from 'components/index';
+import './TasksList.css';
 
-export function TasksList({ tasks }: TaskListProps) {
+export const TasksListProto = () => {
+  const { tasks, isLoader, changeTaskImportant, changeTaskCompleted } = taskStoreInstance;
   return (
     <div className="tasks-wrapper d-flex align-items-center justify-content-center">
-      <ul className="list-group todo-list mb-3">
-        {tasks.map((task) => (
-          <li key={task.id} className="list-group-item">
-            <Task key={task.id} task={task} />
-          </li>
-        ))}
-      </ul>
+      <Loader isLoading={isLoader} variant="circle">
+        <ul className="list-group todo-list mb-3">
+          {tasks.map((task) => (
+            <li key={task.id} className="list-group-item">
+              <Task
+                key={task.id}
+                task={task}
+                onChangeImportant={changeTaskImportant}
+                onChangeCompleted={changeTaskCompleted}
+              />
+            </li>
+          ))}
+        </ul>
+      </Loader>
     </div>
   );
-}
+};
+
+export const TasksList = observer(TasksListProto);

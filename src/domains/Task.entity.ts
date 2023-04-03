@@ -8,6 +8,10 @@ export interface TaskEntity {
   isDone: boolean;
 }
 
+export type TaskEditEntity = Omit<TaskEntity, 'id'>;
+
+export type TaskAddEntity = Omit<TaskEntity, 'id' | 'isDone'>;
+
 export interface TasksStatsEntity {
   total: number;
   important: number;

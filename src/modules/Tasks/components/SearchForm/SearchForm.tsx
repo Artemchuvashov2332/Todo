@@ -1,10 +1,12 @@
 import React, { MouseEvent, useState } from 'react';
+import { observer } from 'mobx-react';
 import { SearchFilter } from '../SearchFilter';
 import { SearchInput } from 'components/SearchInput';
 import { FILTER_TYPES } from 'constants/statusFilterTypes';
 import { FiltersType } from 'domains/Task.entity';
+import { taskStoreInstance } from 'modules/Tasks/store';
 
-export function SearchForm() {
+export const SearchFormProto = () => {
   const [searchInputValue, setSearchInputValue] = useState<string>('');
   const [filterType, setFilterType] = useState<FiltersType>(FILTER_TYPES.ALL);
 
@@ -24,7 +26,9 @@ export function SearchForm() {
 
   const submitHandler = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    console.log(`Поиск в категории ${filterType} ${searchInputValue}`);
+
+    taskStoreInstance.loadTasks({ searchInputValue, filterType });
+    // console.log(`Поиск в категории ${filterType} ${searchInputValue}`);
   };
 
   return (
@@ -36,4 +40,6 @@ export function SearchForm() {
       </button>
     </form>
   );
-}
+};
+
+export const SearchForm = observer(SearchFormProto);
