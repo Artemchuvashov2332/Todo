@@ -1,7 +1,7 @@
 import React, { MouseEvent } from 'react';
 import { ISearchFilterProps } from './SearchFilter.types';
-import { FILTER_TYPES } from 'constants/statusFilterTypes';
-import { FiltersType } from 'domains/Task.entity';
+import { FILTER_TYPES } from 'constants/index';
+import { FiltersType } from 'domains/index';
 import { SearchButton } from 'components/index';
 
 export function SearchFilter({ onChange, selectTypeTask }: ISearchFilterProps) {

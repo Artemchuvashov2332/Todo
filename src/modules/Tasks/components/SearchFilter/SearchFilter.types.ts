@@ -1,4 +1,4 @@
-import { FiltersType } from 'domains/Task.entity';
+import { FiltersType } from 'domains/index';
 
 export interface ISearchFilterProps {
   onChange: (taskStatus: FiltersType) => void;

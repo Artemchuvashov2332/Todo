@@ -1,7 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-import { TaskEntity, TasksStatsEntity } from 'domains/Task.entity';
-import { TasksMock, TasksStatsMock } from '__mocks__/Tasks.mock';
-import { ISearchForm } from 'domains/SearchForm.entity';
+import { TaskEntity, TasksStatsEntity, ISearchForm } from 'domains/index';
+import { TasksMock, TasksStatsMock } from '__mocks__/index';
 import { delay } from 'helpers/index';
 
 type TaskStoreField = '_isLoader' | '_tasks' | '_tasksStats';
@@ -66,6 +65,7 @@ class TaskStore {
     await delay(3000);
 
     this._isLoader = false;
+    return true;
   };
 
   changeTaskImportant = async (id: TaskEntity['id'], currentStatus: boolean) => {

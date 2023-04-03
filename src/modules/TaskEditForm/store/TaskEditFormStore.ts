@@ -53,17 +53,19 @@ class TaskEditFormStore {
       const taskindex = TasksMock.findIndex((task) => task.id === this._taskId);
 
       this._taskFormData = TasksMock[taskindex];
-      // console.log(+this._taskId);
     }
     this._isLoader = false;
   };
 
   editTask = async (task: TaskEditEntity) => {
     this._isLoader = true;
+
     await delay(2500);
 
     if (this._taskId) {
-      TasksMock[+this._taskId] = {
+      const taskindex = TasksMock.findIndex((task) => task.id === this._taskId);
+
+      TasksMock[taskindex] = {
         id: this._taskId,
         name: task.name,
         info: task.info,
@@ -72,6 +74,7 @@ class TaskEditFormStore {
       };
     }
     this._isLoader = false;
+    return true;
   };
 }
 export const taskEditStoreInstance = new TaskEditFormStore();

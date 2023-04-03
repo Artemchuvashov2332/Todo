@@ -1,3 +1,3 @@
-import { TasksStatsEntity } from 'domains/Task.entity';
+import { TasksStatsEntity } from 'domains/index';
 
 export type TasksStatsProps = TasksStatsEntity;

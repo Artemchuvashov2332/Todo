@@ -9,6 +9,7 @@ export function TextField({
   inputType,
   value,
   onChange,
+  onBlur,
   errorText,
 }: TextFieldProps) {
   const onChangeField: ChangeEventHandler<HTMLInputElement> = (evt) => {
@@ -27,6 +28,7 @@ export function TextField({
         placeholder={placeholder}
         value={value}
         onChange={onChangeField}
+        onBlur={onBlur}
       />
       {errorText && <div className="invalid">{errorText}</div>}
     </div>

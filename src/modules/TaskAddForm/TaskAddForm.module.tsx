@@ -1,64 +1,91 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { taskAddStoreInstance } from './store/index';
-import { TextField } from 'components/TextField';
-import { Checkbox } from 'components/Checkbox';
-import { PATH_LIST } from 'constants/paths';
-import { Loader } from 'components/index';
+import { FORM_ADD_DEFAULT_VALUES } from './TaskAddForm.constants';
+import { addFormValidationSchema } from './TaskAddForm.validation';
+import { TextField, Checkbox, Loader } from 'components/index';
+import { PATH_LIST } from 'constants/index';
+import { TaskAddEntity } from 'domains/index';
 
 function TaskAddFormProto() {
-  const [taskNameValue, setTaskNameValue] = useState('');
-  const [taskDescriptionValue, setTaskDescriptionValue] = useState('');
-  const [taskIsImportant, setTaskIsImportant] = useState(false);
+  const { control, handleSubmit, setValue } = useForm<TaskAddEntity>({
+    mode: 'onBlur',
+    defaultValues: FORM_ADD_DEFAULT_VALUES,
+    resolver: yupResolver(addFormValidationSchema),
+  });
   const navigate = useNavigate();
 
   const onTaskNameChange = (text: string) => {
-    setTaskNameValue(text);
+    setValue('name', text);
   };
 
   const onTaskDescriptionChange = (text: string) => {
-    setTaskDescriptionValue(text);
+    setValue('info', text);
   };
 
   const onTaskImportant = (value: boolean) => {
-    setTaskIsImportant(value);
+    setValue('isImportant', value);
   };
 
   const onSubmitTaskFors = async (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    const res = await taskAddStoreInstance.postTask({
-      name: taskNameValue,
-      info: taskDescriptionValue,
-      isImportant: taskIsImportant,
-    });
-
-    if (res) navigate(PATH_LIST.ROOT);
+    handleSubmit(async (data) => {
+      const res = await taskAddStoreInstance.postTask(data);
+      if (res) navigate(PATH_LIST.ROOT);
+    })();
   };
 
   return (
-    <form>
-      <TextField
-        label="Task name"
-        placeholder="Enter the name of the task"
-        inputType="text"
-        onChange={onTaskNameChange}
-        value={taskNameValue}
-      />
-      <TextField
-        label="Task description"
-        placeholder="What do you want to do"
-        inputType="text"
-        onChange={onTaskDescriptionChange}
-        value={taskDescriptionValue}
-      />
-      <Checkbox label="Important" checked={taskIsImportant} onChange={onTaskImportant} />
-      <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
-        <Loader isLoading={taskAddStoreInstance.isLoader} variant="dot">
-          Add task
-        </Loader>
-      </button>
-    </form>
+    <div className="form-container d-flex align-items-center justify-content-center">
+      <Loader isLoading={taskAddStoreInstance.isLoader} variant="circle">
+        <form className="w-100">
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { value, onBlur }, fieldState: { error } }) => (
+              <TextField
+                label="Task name"
+                placeholder="Enter the name of the task"
+                inputType="text"
+                onChange={onTaskNameChange}
+                onBlur={onBlur}
+                value={value}
+                errorText={error?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="info"
+            render={({ field: { value, onBlur }, fieldState: { error } }) => (
+              <TextField
+                label="Task description"
+                placeholder="What do you want to do"
+                inputType="text"
+                onChange={onTaskDescriptionChange}
+                onBlur={onBlur}
+                value={value}
+                errorText={error?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="isImportant"
+            render={({ field: { value } }) => <Checkbox label="Important" checked={value} onChange={onTaskImportant} />}
+          />
+
+          <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
+            Add task
+          </button>
+        </form>
+      </Loader>
+    </div>
   );
 }
 

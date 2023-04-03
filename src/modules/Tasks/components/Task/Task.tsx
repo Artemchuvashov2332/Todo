@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TaskProps } from './Task.types';
-import './Task.css';
 import { EDIT, ROOT } from 'constants/index';
+import './Task.css';
 
 export function Task({ task, onChangeCompleted, onChangeImportant }: TaskProps) {
   const { name, info, isImportant, isDone, id } = task;

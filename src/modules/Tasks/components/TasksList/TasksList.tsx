@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Task } from '../Task';
-import { taskStoreInstance } from 'modules/Tasks/store';
+import { Task } from '../Task/index';
+import { taskStoreInstance } from '../../store/index';
 import { Loader } from 'components/index';
 import './TasksList.css';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiltersType } from 'domains/Task.entity';
+import { FiltersType } from 'domains/index';
 
 export interface ISearchButtonProps {
   // type: 'button';

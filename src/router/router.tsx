@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { TaskEditPage, TasksPage, TaskAddPage } from 'pages/index';
-import { PATH_LIST } from 'constants/paths';
+import { PATH_LIST } from 'constants/index';
 
 export function Router() {
   return (

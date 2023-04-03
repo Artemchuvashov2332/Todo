@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 import { TasksStats, TasksList, SearchForm } from './components/index';
-import { taskStoreInstance } from './store';
+import { taskStoreInstance } from './store/index';
 
 const TasksProto = () => {
   useEffect(() => {
