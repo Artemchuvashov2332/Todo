@@ -1,9 +1,10 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { TaskEntity, TasksStatsEntity, ISearchForm } from 'domains/index';
-import { TasksMock, TasksStatsMock } from '__mocks__/index';
-import { delay } from 'helpers/index';
+import { getInternalTasksStats, mapToExternalParams, mapToInterlanTasks } from 'helpers/index';
+import { taskAgentInstance } from 'http/index';
+import { FILTER_TYPES } from 'constants/index';
 
-type TaskStoreField = '_isLoader' | '_tasks' | '_tasksStats';
+type TaskStoreField = '_isLoader' | '_tasks' | '_tasksStats' | '_currentSearchForm';
 
 class TaskStore {
   constructor() {
@@ -11,6 +12,7 @@ class TaskStore {
       _isLoader: observable,
       _tasks: observable,
       _tasksStats: observable,
+      _currentSearchForm: observable,
 
       isLoader: computed,
       tasks: computed,
@@ -19,15 +21,20 @@ class TaskStore {
       loadTasks: action,
       changeTaskImportant: action,
       changeTaskCompleted: action,
+      deleteTask: action,
     });
   }
 
   private _isLoader = false;
-  private _tasks: TaskEntity[] = [];
-  private _tasksStats: TasksStatsEntity = {
+  private _tasks: TaskEntity[] | null = [];
+  private _tasksStats: TasksStatsEntity | null = {
     total: 0,
     important: 0,
     done: 0,
+  };
+  private _currentSearchForm: ISearchForm = {
+    searchInputValue: '',
+    filterType: FILTER_TYPES.ALL,
   };
 
   get isLoader() {
@@ -43,44 +50,69 @@ class TaskStore {
   }
 
   loadTasks = async (query?: ISearchForm) => {
-    this._isLoader = true;
-    this._tasksStats = TasksStatsMock;
-    this._tasks = TasksMock;
+    try {
+      this._isLoader = true;
 
-    if (query) {
-      const keyword = query.searchInputValue.toLowerCase();
-      this._tasks = this._tasks.filter(
-        (task) => task.info.toLowerCase().includes(keyword) || task.name.toLowerCase().includes(keyword)
-      );
+      const externalParam = mapToExternalParams(query);
+      const tasks = await taskAgentInstance.getAllTasks(externalParam);
 
-      if (query.filterType === 'Active') {
-        this._tasks = this._tasks.filter(({ isDone }) => !isDone);
-      } else if (query.filterType === 'Done') {
-        this._tasks = this._tasks.filter(({ isDone }) => isDone);
-      } else if (query.filterType === 'Important') {
-        this._tasks = this._tasks.filter(({ isImportant }) => isImportant);
-      }
+      this._tasks = mapToInterlanTasks(tasks);
+      this._tasksStats = getInternalTasksStats(tasks);
+
+      this._currentSearchForm = {
+        searchInputValue: query?.searchInputValue || '',
+        filterType: query?.filterType || FILTER_TYPES.ALL,
+      };
+    } catch (error) {
+      this._tasks = null;
+      this._tasksStats = null;
+    } finally {
+      this._isLoader = false;
     }
-
-    await delay(3000);
-
-    this._isLoader = false;
-    return true;
   };
 
   changeTaskImportant = async (id: TaskEntity['id'], currentStatus: boolean) => {
-    const taskindex = this._tasks.findIndex((task) => task.id === id);
-    TasksMock[taskindex].isImportant = !currentStatus;
-
-    await this.loadTasks();
+    try {
+      this._isLoader = true;
+      await taskAgentInstance.patchTask(id, {
+        isImportant: !currentStatus,
+      });
+      await this.loadTasks(this._currentSearchForm);
+    } catch (error) {
+      this._tasks = null;
+      this._tasksStats = null;
+    } finally {
+      this._isLoader = false;
+    }
   };
 
   changeTaskCompleted = async (id: TaskEntity['id'], currentStatus: boolean) => {
-    const taskindex = this._tasks.findIndex((task) => task.id === id);
-    TasksMock[taskindex].isImportant = false;
-    TasksMock[taskindex].isDone = !currentStatus;
+    try {
+      this._isLoader = true;
+      await taskAgentInstance.patchTask(id, {
+        isImportant: false,
+        isCompleted: !currentStatus,
+      });
+      await this.loadTasks(this._currentSearchForm);
+    } catch (error) {
+      this._tasks = null;
+      this._tasksStats = null;
+    } finally {
+      this._isLoader = false;
+    }
+  };
 
-    await this.loadTasks();
+  deleteTask = async (id: string) => {
+    try {
+      this._isLoader = true;
+      await taskAgentInstance.deleteTask(id);
+      await this.loadTasks(this._currentSearchForm);
+    } catch (error) {
+      this._tasks = null;
+      this._tasksStats = null;
+    } finally {
+      this._isLoader = false;
+    }
   };
 }
 

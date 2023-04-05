@@ -25,7 +25,7 @@ export const SearchFormProto = () => {
   const submitHandler = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     handleSubmit(async (data) => {
-      const res = await taskStoreInstance.loadTasks(data);
+      await taskStoreInstance.loadTasks(data);
     })();
   };
 

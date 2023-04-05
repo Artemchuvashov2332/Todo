@@ -4,7 +4,7 @@ import { TaskProps } from './Task.types';
 import { EDIT, ROOT } from 'constants/index';
 import './Task.css';
 
-export function Task({ task, onChangeCompleted, onChangeImportant }: TaskProps) {
+export function Task({ task, onChangeCompleted, onChangeImportant, deleteTask }: TaskProps) {
   const { name, info, isImportant, isDone, id } = task;
 
   return (
@@ -35,11 +35,13 @@ export function Task({ task, onChangeCompleted, onChangeImportant }: TaskProps) 
             <i className="fa fa-check" />
           </button>
 
-          <button type="button" className="task__btn btn btn-outline-danger btn-sm float-right btn-delete">
+          <button
+            type="button"
+            className="task__btn btn btn-outline-danger btn-sm float-right btn-delete"
+            onClick={() => deleteTask(id)}>
             <i className="fa fa-trash-o" />
           </button>
 
-          {/* TODO: Исправить ссылку, когда будет страница редактирования */}
           <Link className="task__btn btn btn-outline-secondary btn-sm float-right" to={`${ROOT}${EDIT}/${id}`}>
             <i className="fa fa-pencil" />
           </Link>
