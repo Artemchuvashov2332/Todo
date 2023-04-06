@@ -1,41 +1,45 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { TaskAddEntity } from 'domains/index';
-import { TasksMock } from '__mocks__/index';
-import { delay } from 'helpers/index';
+import { mapToExtermalTask } from 'helpers/mapper';
+import { taskAgentInstance } from 'http/agent';
 
-type TaskAddFormStoreField = '_isLoader';
+type TaskAddFormStoreField = '_isLoader' | '_isError';
 
 class TaskAddFormStore {
   constructor() {
     makeObservable<this, TaskAddFormStoreField>(this, {
       _isLoader: observable,
+      _isError: observable,
 
       isLoader: computed,
+      isError: computed,
 
       postTask: action,
     });
   }
 
   private _isLoader = false;
+  private _isError = false;
 
   get isLoader() {
     return this._isLoader;
   }
 
+  get isError() {
+    return this._isError;
+  }
+
   postTask = async (task: TaskAddEntity) => {
-    this._isLoader = true;
-    await delay(2500);
-
-    TasksMock.push({
-      id: `${Date.now()}`,
-      name: task.name,
-      info: task.info,
-      isImportant: task.isImportant,
-      isDone: false,
-    });
-
-    this._isLoader = false;
-    return true;
+    try {
+      this._isLoader = false;
+      const externalTask = mapToExtermalTask({ ...task, isDone: false });
+      await taskAgentInstance.postTask(externalTask);
+      return true;
+    } catch (error) {
+      this._isError = true;
+    } finally {
+      this._isLoader = false;
+    }
   };
 }
 

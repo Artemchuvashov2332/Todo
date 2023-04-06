@@ -10,7 +10,7 @@ export const TasksListProto = () => {
   return (
     <div className="tasks-wrapper d-flex align-items-center justify-content-center">
       <Loader isLoading={isLoader} variant="circle">
-        {tasks ? (
+        {tasks?.length ? (
           <ul className="list-group todo-list mb-3">
             {tasks.map((task) => (
               <li key={task.id} className="list-group-item">
@@ -25,7 +25,7 @@ export const TasksListProto = () => {
             ))}
           </ul>
         ) : (
-          <p>NOT FOUND</p>
+          <p>Ничего не найдено</p>
         )}
       </Loader>
     </div>

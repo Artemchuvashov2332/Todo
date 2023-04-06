@@ -29,7 +29,7 @@ const TasksStatsProto = () => {
           </div>
         </>
       ) : (
-        <p>NOT FOUND</p>
+        <p>Ничего не найдено</p>
       )}
     </div>
   );

@@ -150,8 +150,8 @@ export interface paths {
   };
 }
 
-export interface components { }
+export interface components {}
 
-export interface operations { }
+export interface operations {}
 
-export interface external { }
+export interface external {}

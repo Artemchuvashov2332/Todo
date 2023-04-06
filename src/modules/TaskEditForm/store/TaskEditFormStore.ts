@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { TaskEditEntity } from 'domains/index';
-import { TasksMock } from '__mocks__/index';
-import { delay } from 'helpers/index';
+import { mapToExtermalTask, mapToInternalTask } from 'helpers/index';
+import { taskAgentInstance } from 'http/index';
 
 type TaskEditFormStoreField = '_isLoader' | '_taskId' | '_taskFormData';
 
@@ -47,34 +47,32 @@ class TaskEditFormStore {
   }
 
   getTask = async () => {
-    this._isLoader = true;
-    await delay(2500);
-    if (this._taskId) {
-      const taskindex = TasksMock.findIndex((task) => task.id === this._taskId);
-
-      this._taskFormData = TasksMock[taskindex];
+    try {
+      this._isLoader = true;
+      if (this._taskId) {
+        const task = await taskAgentInstance.getTaskById(this._taskId);
+        this._taskFormData = mapToInternalTask(task);
+      }
+    } catch (error) {
+      this._taskId = null;
+    } finally {
+      this._isLoader = false;
     }
-    this._isLoader = false;
   };
 
-  editTask = async (task: TaskEditEntity) => {
-    this._isLoader = true;
-
-    await delay(2500);
-
-    if (this._taskId) {
-      const taskindex = TasksMock.findIndex((task) => task.id === this._taskId);
-
-      TasksMock[taskindex] = {
-        id: this._taskId,
-        name: task.name,
-        info: task.info,
-        isImportant: task.isImportant,
-        isDone: task.isDone,
-      };
+  editTask = async (task: TaskEditEntity): Promise<boolean | void> => {
+    try {
+      this._isLoader = true;
+      if (this._taskId) {
+        const externalTask = mapToExtermalTask(task);
+        await taskAgentInstance.patchTask(this._taskId, externalTask);
+      }
+      return true;
+    } catch (error) {
+      this._taskId = null;
+    } finally {
+      this._isLoader = false;
     }
-    this._isLoader = false;
-    return true;
   };
 }
 export const taskEditStoreInstance = new TaskEditFormStore();

@@ -1,6 +1,11 @@
 import { FILTER_TYPES } from 'constants/index';
-import { ISearchForm, TaskEditEntity, TaskEntity, TasksStatsEntity } from 'domains/index';
-import { GetAllTasksQueryParams, GetAllTasksQueryResponse, GetTaskQueryResponse } from 'http/model/index';
+import { ISearchForm, TaskAddEntity, TaskEditEntity, TaskEntity, TasksStatsEntity } from 'domains/index';
+import {
+  GetAllTasksQueryParams,
+  GetAllTasksQueryResponse,
+  GetTaskQueryResponse,
+  UpdateTaskQueryRequestBoby,
+} from 'http/model/index';
 
 //фронтовый search в бек
 export const mapToExternalParams = (params?: ISearchForm): GetAllTasksQueryParams | undefined => {
@@ -39,10 +44,18 @@ export const mapToInterlanTasks = (tasks: GetAllTasksQueryResponse): TaskEntity[
   return tasksArr;
 };
 
-//бековую таксу в фронт
-export const mapToInternalTask = (task: GetTaskQueryResponse): TaskEditEntity | undefined => {
-  if (!task.id) return undefined;
+//фронтовую таску в бек
+export const mapToExtermalTask = (task: TaskEditEntity): UpdateTaskQueryRequestBoby => {
+  return {
+    name: task.name,
+    info: task.info,
+    isImportant: task.isImportant,
+    isCompleted: task.isDone,
+  };
+};
 
+//бековую таксу в фронт
+export const mapToInternalTask = (task: GetTaskQueryResponse): TaskEditEntity => {
   return {
     name: task.name ?? 'Неизвестно',
     info: task.info ?? 'Неизвестно',

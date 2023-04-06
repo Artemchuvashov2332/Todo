@@ -9,7 +9,7 @@ import {
 class TaskAgent extends BasicAgent {
   constructor() {
     //НЕ ЗАБУДЬ ПОМЕНЯТЬ НА .env
-    super('https://intership-liga.ru');
+    super(process.env.REACT_APP_API_URL_LIGA as string);
   }
 
   getAllTasks = async (params?: GetAllTasksQueryParams): Promise<GetAllTasksQueryResponse> => {
