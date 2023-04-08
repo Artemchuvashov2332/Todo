@@ -1,9 +1,11 @@
 import React, { MouseEvent } from 'react';
 import { observer } from 'mobx-react';
 import { Controller, useForm } from 'react-hook-form';
+import { Button } from '@mui/material';
 import { SearchFilter } from '../SearchFilter/index';
 import { taskStoreInstance } from '../../store/index';
 import { SEARCH_FORM_DEFAULT_VALUES } from './SearchForm.constants';
+import { StyledSearchForm } from './SearchForm.styled';
 import { SearchInput } from 'components/index';
 import { FiltersType, ISearchForm } from 'domains/index';
 
@@ -30,7 +32,7 @@ export const SearchFormProto = () => {
   };
 
   return (
-    <form className="search-form d-flex justify-content-between">
+    <StyledSearchForm>
       <Controller
         control={control}
         name="searchInputValue"
@@ -42,10 +44,10 @@ export const SearchFormProto = () => {
         name="filterType"
         render={({ field: { value } }) => <SearchFilter onChange={changeTaskStatus} selectTypeTask={value} />}
       />
-      <button type="submit" className="btn btn-primary" onClick={submitHandler}>
+      <Button type="submit" color="primary" variant="contained" onClick={submitHandler}>
         Find
-      </button>
-    </form>
+      </Button>
+    </StyledSearchForm>
   );
 };
 

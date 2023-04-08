@@ -1,7 +1,8 @@
 import React from 'react';
 import { useWatch } from 'react-hook-form';
+import { FormGroup } from '@mui/material';
 import { ICheckboxWrapperProps } from './CheckboxWrapper.types';
-import { Checkbox } from 'components/index';
+import { CheckboxCustom } from 'components/index';
 
 export function CheckboxWrapper({ control, onTaskCompleted, onTaskImportant }: ICheckboxWrapperProps) {
   const isImportant = useWatch({
@@ -15,9 +16,21 @@ export function CheckboxWrapper({ control, onTaskCompleted, onTaskImportant }: I
   });
 
   return (
-    <>
-      <Checkbox label="Intortant" checked={isImportant} disabled={isDone} onChange={onTaskImportant} />
-      <Checkbox label="Complited" checked={isDone} disabled={isImportant} onChange={onTaskCompleted} />
-    </>
+    <FormGroup>
+      <CheckboxCustom
+        label="Intortant"
+        color="success"
+        checked={isImportant}
+        disabled={isDone}
+        onChange={onTaskImportant}
+      />
+      <CheckboxCustom
+        label="Complited"
+        color="error"
+        checked={isDone}
+        disabled={isImportant}
+        onChange={onTaskCompleted}
+      />
+    </FormGroup>
   );
 }

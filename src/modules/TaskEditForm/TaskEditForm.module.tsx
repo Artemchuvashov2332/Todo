@@ -1,16 +1,17 @@
 import React, { MouseEvent, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Button } from '@mui/material';
 import { taskEditStoreInstance } from './store/index';
 import { FORM_EDIT_DEFAULT_VALUES } from './TaskEditForm.constants';
 import { editFormValidationSchema } from './TaskEditForm.validation';
 import { CheckboxWrapper } from './components/index';
+import { StyledEditForm, StyledFormWrapperBox } from './TaskEditForm.styled';
 import { TaskEditEntity } from 'domains/index';
-import { TextField, Loader, ErrorDialog } from 'components/index';
-import { EDIT, PATH_LIST, ROOT } from 'constants/index';
-import './TaskEditForm.css';
+import { CustomTextField, CustomLoader, ErrorDialog } from 'components/index';
+import { PATH_LIST } from 'constants/index';
 
 function TaskEditFormProto() {
   const { control, handleSubmit, reset, setValue } = useForm<TaskEditEntity>({
@@ -59,22 +60,22 @@ function TaskEditFormProto() {
   };
 
   return (
-    <div className="form-container d-flex align-items-center justify-content-center">
-      <Loader isLoading={taskEditStoreInstance.isLoader} variant="circle">
+    <StyledFormWrapperBox>
+      <CustomLoader isLoading={taskEditStoreInstance.isLoader}>
         {taskEditStoreInstance.taskId ? (
-          <form className="w-100">
+          <StyledEditForm>
             <Controller
               control={control}
               name="name"
               render={({ field: { value, onBlur }, fieldState: { error } }) => (
-                <TextField
-                  containerClassName="text-field"
+                <CustomTextField
                   label="Task name"
                   placeholder="Enter the name of the task"
                   inputType="text"
                   onChange={onTaskNameChange}
                   onBlur={onBlur}
                   value={value}
+                  error={!!error}
                   errorText={error?.message}
                 />
               )}
@@ -84,13 +85,14 @@ function TaskEditFormProto() {
               control={control}
               name="info"
               render={({ field: { value, onBlur }, fieldState: { error } }) => (
-                <TextField
+                <CustomTextField
                   label="Task description"
                   placeholder="What do you want to do"
                   inputType="text"
                   onChange={onTaskDescriptionChange}
                   onBlur={onBlur}
                   value={value}
+                  error={!!error}
                   errorText={error?.message}
                 />
               )}
@@ -100,17 +102,17 @@ function TaskEditFormProto() {
           и небыло перерендера всей формы */}
             <CheckboxWrapper control={control} onTaskImportant={onTaskImportant} onTaskCompleted={onTaskCompleted} />
 
-            <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
+            <Button variant="contained" fullWidth onClick={onSubmitTaskFors}>
               Edit task
-            </button>
-          </form>
+            </Button>
+          </StyledEditForm>
         ) : (
           <ErrorDialog redirect={navigate} homePath={PATH_LIST.ROOT}>
             Что-то пошло не так
           </ErrorDialog>
         )}
-      </Loader>
-    </div>
+      </CustomLoader>
+    </StyledFormWrapperBox>
   );
 }
 

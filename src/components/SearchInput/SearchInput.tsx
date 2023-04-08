@@ -1,6 +1,7 @@
 import React, { ChangeEventHandler, MouseEvent } from 'react';
-import './SearchInput.css';
+import ClearIcon from '@mui/icons-material/Clear';
 import { SearchInputProps } from './SearchInput.types';
+import { StyledBox, StyledIconButton, StyledTextFiled } from './SearchInput.styled';
 
 export function SearchInput({ onChange, value, onReset }: SearchInputProps) {
   const onSearchInputChange: ChangeEventHandler<HTMLInputElement> = (evt) => onChange(evt.target.value);
@@ -11,11 +12,11 @@ export function SearchInput({ onChange, value, onReset }: SearchInputProps) {
   };
 
   return (
-    <div className="search-panel">
-      <input className="form-control search-input" placeholder="search" onChange={onSearchInputChange} value={value} />
-      <button className="close" onClick={onResetBtnClick}>
-        <i className="fa fa-close"></i>
-      </button>
-    </div>
+    <StyledBox>
+      <StyledTextFiled label="search" onChange={onSearchInputChange} value={value} size="small" />
+      <StyledIconButton onClick={onResetBtnClick}>
+        <ClearIcon />
+      </StyledIconButton>
+    </StyledBox>
   );
 }

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Button } from '@mui/material';
 import { taskAddStoreInstance } from './store/index';
 import { FORM_ADD_DEFAULT_VALUES } from './TaskAddForm.constants';
 import { addFormValidationSchema } from './TaskAddForm.validation';
-import { TextField, Checkbox, Loader, ErrorDialog } from 'components/index';
+import { StyledAddForm, StyledFormWrapperBox } from './TaskAddForm.styled';
+import { CustomTextField, CheckboxCustom, CustomLoader, ErrorDialog } from 'components/index';
 import { PATH_LIST } from 'constants/index';
 import { TaskAddEntity } from 'domains/index';
 
@@ -39,21 +41,22 @@ function TaskAddFormProto() {
   };
 
   return (
-    <div className="form-container d-flex align-items-center justify-content-center">
-      <Loader isLoading={taskAddStoreInstance.isLoader} variant="circle">
+    <StyledFormWrapperBox>
+      <CustomLoader isLoading={taskAddStoreInstance.isLoader}>
         {!taskAddStoreInstance.isError ? (
-          <form className="w-100">
+          <StyledAddForm>
             <Controller
               control={control}
               name="name"
               render={({ field: { value, onBlur }, fieldState: { error } }) => (
-                <TextField
+                <CustomTextField
                   label="Task name"
                   placeholder="Enter the name of the task"
                   inputType="text"
                   onChange={onTaskNameChange}
                   onBlur={onBlur}
                   value={value}
+                  error={!!error}
                   errorText={error?.message}
                 />
               )}
@@ -63,13 +66,14 @@ function TaskAddFormProto() {
               control={control}
               name="info"
               render={({ field: { value, onBlur }, fieldState: { error } }) => (
-                <TextField
+                <CustomTextField
                   label="Task description"
                   placeholder="What do you want to do"
                   inputType="text"
                   onChange={onTaskDescriptionChange}
                   onBlur={onBlur}
                   value={value}
+                  error={!!error}
                   errorText={error?.message}
                 />
               )}
@@ -79,21 +83,21 @@ function TaskAddFormProto() {
               control={control}
               name="isImportant"
               render={({ field: { value } }) => (
-                <Checkbox label="Important" checked={value} onChange={onTaskImportant} />
+                <CheckboxCustom color="success" label="Important" checked={value} onChange={onTaskImportant} />
               )}
             />
 
-            <button className="btn btn-secondary d-block ml-auto w-100" onClick={onSubmitTaskFors}>
+            <Button variant="contained" fullWidth onClick={onSubmitTaskFors}>
               Add task
-            </button>
-          </form>
+            </Button>
+          </StyledAddForm>
         ) : (
           <ErrorDialog redirect={navigate} homePath={PATH_LIST.ROOT}>
             Что-то пошло не так
           </ErrorDialog>
         )}
-      </Loader>
-    </div>
+      </CustomLoader>
+    </StyledFormWrapperBox>
   );
 }
 

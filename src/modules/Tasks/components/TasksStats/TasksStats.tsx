@@ -1,37 +1,41 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Box, Skeleton, Typography } from '@mui/material';
 import { taskStoreInstance } from '../../store/index';
-import { Loader } from 'components/index';
+import { StyleStatsNumber, StyledTasksStatsStack } from './TasksStats.styled';
 
 const TasksStatsProto = () => {
   const { tasksStats, isLoader } = taskStoreInstance;
   return (
-    <div className="d-flex w-100 justify-content-between">
-      {tasksStats ? (
+    <StyledTasksStatsStack direction="row">
+      {isLoader ? (
         <>
-          <div>
-            Total:
-            <Loader isLoading={isLoader} variant="dot">
-              <span className="badge bg-secondary">{tasksStats.total}</span>
-            </Loader>
-          </div>
-          <div>
-            Important:
-            <Loader isLoading={isLoader} variant="dot">
-              <span className="badge bg-secondary">{tasksStats.important}</span>
-            </Loader>
-          </div>
-          <div>
-            Done:
-            <Loader isLoading={isLoader} variant="dot">
-              <span className="badge bg-secondary">{tasksStats.done}</span>
-            </Loader>
-          </div>
+          <Skeleton variant="rounded" width={100} height={25} />
+          <Skeleton variant="rounded" width={100} height={25} />
+          <Skeleton variant="rounded" width={100} height={25} />
         </>
       ) : (
-        <p>Ничего не найдено</p>
+        <>
+          {tasksStats ? (
+            <>
+              <Box>
+                Total: <StyleStatsNumber variant="body1">{tasksStats.total}</StyleStatsNumber>
+              </Box>
+              <Box>
+                Important: <StyleStatsNumber variant="body1">{tasksStats.important}</StyleStatsNumber>
+              </Box>
+              <Box>
+                Done: <StyleStatsNumber variant="body1">{tasksStats.done}</StyleStatsNumber>
+              </Box>
+            </>
+          ) : (
+            <Typography component="p" variant="body1">
+              Ооооооооййёёёёёёёёёй!
+            </Typography>
+          )}
+        </>
       )}
-    </div>
+    </StyledTasksStatsStack>
   );
 };
 

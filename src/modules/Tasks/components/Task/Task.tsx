@@ -1,58 +1,59 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import DoneIcon from '@mui/icons-material/Done';
+import ModeIcon from '@mui/icons-material/Mode';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { Stack } from '@mui/material';
 import { TaskProps } from './Task.types';
+import {
+  StyledImportantButton,
+  StyledCompletedButton,
+  StyledListItemText,
+  StyledDeleteButton,
+  StyledLinkButton,
+  StyledTaskBox,
+} from './Task.styled';
 import { EDIT, ROOT } from 'constants/index';
-import './Task.css';
 
 export function Task({ task, onChangeCompleted, onChangeImportant, deleteTask }: TaskProps) {
   const { name, info, isImportant, isDone, id } = task;
 
   return (
-    <div>
-      <div className="task mb-2">
-        <p
-          className={`task__label ${isDone ? 'text-decoration-line-through text-secondary' : ''} ${
-            isImportant ? 'text-success fw-bold' : ''
-          }`}>
-          {name}
-        </p>
+    <>
+      <StyledTaskBox>
+        <StyledListItemText isImportant={isImportant} isDone={isDone} primary={name} />
 
-        <div className="task__btns">
-          <button
+        <Stack component="div" direction="row" spacing={0.5}>
+          <StyledImportantButton
             type="button"
-            className={`task__btn btn ${
-              isImportant ? 'btn-success' : 'btn-outline-success'
-            } btn-sm float-right btn-important`}
+            size="small"
+            isImportant={isImportant}
             onClick={() => onChangeImportant(id, isImportant)}
             disabled={isDone}>
-            <i className="fa fa-exclamation" />
-          </button>
+            <PriorityHighIcon fontSize="small" />
+          </StyledImportantButton>
 
-          <button
+          <StyledCompletedButton
             type="button"
-            className={`task__btn btn ${isDone ? 'btn-danger' : 'btn-outline-danger'} btn-sm float-right`}
+            size="small"
+            isDone={isDone}
             onClick={() => onChangeCompleted(id, isDone)}>
-            <i className="fa fa-check" />
-          </button>
+            <DoneIcon fontSize="small" />
+          </StyledCompletedButton>
 
-          <button
-            type="button"
-            className="task__btn btn btn-outline-danger btn-sm float-right btn-delete"
-            onClick={() => deleteTask(id)}>
-            <i className="fa fa-trash-o" />
-          </button>
+          <StyledDeleteButton type="button" size="small" onClick={() => deleteTask(id)}>
+            <DeleteOutlineIcon fontSize="small" />
+          </StyledDeleteButton>
 
-          <Link className="task__btn btn btn-outline-secondary btn-sm float-right" to={`${ROOT}${EDIT}/${id}`}>
-            <i className="fa fa-pencil" />
+          <Link to={`${ROOT}${EDIT}/${id}`}>
+            <StyledLinkButton size="small">
+              <ModeIcon fontSize="small" />
+            </StyledLinkButton>
           </Link>
-        </div>
-      </div>
-      <p
-        className={`${isDone ? 'text-decoration-line-through text-secondary' : ''} ${
-          isImportant ? 'text-success fw-bold' : ''
-        }`}>
-        {info}
-      </p>
-    </div>
+        </Stack>
+      </StyledTaskBox>
+      <StyledListItemText isImportant={isImportant} isDone={isDone} primary={info} />
+    </>
   );
 }

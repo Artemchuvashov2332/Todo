@@ -1,19 +1,20 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Typography } from '@mui/material';
 import { Task } from '../Task/index';
 import { taskStoreInstance } from '../../store/index';
-import { Loader } from 'components/index';
-import './TasksList.css';
+import { StyledList, StyledListItem, StyledTasksBox } from './TasksList.styled';
+import { CustomLoader } from 'components/index';
 
 export const TasksListProto = () => {
   const { tasks, isLoader, changeTaskImportant, changeTaskCompleted, deleteTask } = taskStoreInstance;
   return (
-    <div className="tasks-wrapper d-flex align-items-center justify-content-center">
-      <Loader isLoading={isLoader} variant="circle">
+    <StyledTasksBox>
+      <CustomLoader isLoading={isLoader}>
         {tasks?.length ? (
-          <ul className="list-group todo-list mb-3">
+          <StyledList>
             {tasks.map((task) => (
-              <li key={task.id} className="list-group-item">
+              <StyledListItem key={task.id}>
                 <Task
                   key={task.id}
                   task={task}
@@ -21,14 +22,16 @@ export const TasksListProto = () => {
                   onChangeCompleted={changeTaskCompleted}
                   deleteTask={deleteTask}
                 />
-              </li>
+              </StyledListItem>
             ))}
-          </ul>
+          </StyledList>
         ) : (
-          <p>Ничего не найдено</p>
+          <Typography component="p" variant="h5">
+            Ничего не найдено
+          </Typography>
         )}
-      </Loader>
-    </div>
+      </CustomLoader>
+    </StyledTasksBox>
   );
 };
 

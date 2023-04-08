@@ -1,4 +1,5 @@
 import React, { MouseEvent } from 'react';
+import { ButtonGroup } from '@mui/material';
 import { ISearchFilterProps } from './SearchFilter.types';
 import { FILTER_CLASSES } from './SearchFilter.constans';
 import { FILTER_TYPES } from 'constants/index';
@@ -11,14 +12,15 @@ export function SearchFilter({ onChange, selectTypeTask }: ISearchFilterProps) {
   };
 
   return (
-    <div className="btn-group" onClick={onChangeTaskStatus}>
+    <ButtonGroup onClick={onChangeTaskStatus}>
       {Object.values(FILTER_TYPES).map((type) => (
         <SearchButton
           key={type}
-          className={selectTypeTask === type ? FILTER_CLASSES.ACTIVE : FILTER_CLASSES.NOT_ACTIVE}>
+          variant="contained"
+          color={selectTypeTask === type ? FILTER_CLASSES.ACTIVE : FILTER_CLASSES.NOT_ACTIVE}>
           {type}
         </SearchButton>
       ))}
-    </div>
+    </ButtonGroup>
   );
 }

@@ -1,10 +1,11 @@
 import React from 'react';
+import { Button } from '@mui/material';
 import { ISearchButtonProps } from './SearchButtons.types';
 
-export function SearchButton({ children, className }: ISearchButtonProps) {
+export function SearchButton({ children, variant, color }: ISearchButtonProps) {
   return (
-    <button type="button" className={className}>
+    <Button type="button" variant={variant} color={color}>
       {children}
-    </button>
+    </Button>
   );
 }

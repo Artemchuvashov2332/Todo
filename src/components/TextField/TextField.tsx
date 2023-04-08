@@ -1,15 +1,16 @@
 import React, { ChangeEventHandler } from 'react';
+import { TextField } from '@mui/material';
 import { TextFieldProps } from './TextField.types';
-import './TextField.css';
+import { StyledBox } from './TextField.styled';
 
-export function TextField({
+export function CustomTextField({
   label,
-  placeholder,
-  containerClassName = '',
   inputType,
+  placeholder,
   value,
   onChange,
   onBlur,
+  error,
   errorText,
 }: TextFieldProps) {
   const onChangeField: ChangeEventHandler<HTMLInputElement> = (evt) => {
@@ -17,20 +18,18 @@ export function TextField({
   };
 
   return (
-    <div className={`mb-3 ${containerClassName}`}>
-      <label htmlFor={label} className="form-label">
-        {label}
-      </label>
-      <input
+    <StyledBox>
+      <TextField
+        label={label}
         type={inputType}
-        className="form-control"
-        id={label}
         placeholder={placeholder}
+        fullWidth
         value={value}
         onChange={onChangeField}
         onBlur={onBlur}
+        error={error}
+        helperText={errorText}
       />
-      {errorText && <div className="invalid">{errorText}</div>}
-    </div>
+    </StyledBox>
   );
 }

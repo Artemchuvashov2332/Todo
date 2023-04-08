@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttribute } from 'react';
+import { FocusEventHandler, HTMLInputTypeAttribute } from 'react';
 
 export interface TextFieldProps {
   label: string;
@@ -6,8 +6,8 @@ export interface TextFieldProps {
   inputType?: HTMLInputTypeAttribute;
   containerClassName?: string;
   value?: string;
-  // onChange?: ChangeEventHandler<HTMLInputElement>;
   onChange?: (text: string) => void;
   onBlur?: FocusEventHandler<HTMLInputElement>;
+  error?: boolean;
   errorText?: string;
 }
