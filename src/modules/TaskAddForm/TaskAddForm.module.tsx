@@ -8,7 +8,7 @@ import { taskAddStoreInstance } from './store/index';
 import { FORM_ADD_DEFAULT_VALUES } from './TaskAddForm.constants';
 import { addFormValidationSchema } from './TaskAddForm.validation';
 import { StyledAddForm, StyledFormWrapperBox } from './TaskAddForm.styled';
-import { CustomTextField, CheckboxCustom, CustomLoader, ErrorDialog } from 'components/index';
+import { CustomTextField, CheckboxCustom, Loader, ErrorDialog } from 'components/index';
 import { PATH_LIST } from 'constants/index';
 import { TaskAddEntity } from 'domains/index';
 
@@ -42,7 +42,7 @@ function TaskAddFormProto() {
 
   return (
     <StyledFormWrapperBox>
-      <CustomLoader isLoading={taskAddStoreInstance.isLoader}>
+      <Loader isLoading={taskAddStoreInstance.isLoader}>
         {!taskAddStoreInstance.isError ? (
           <StyledAddForm>
             <Controller
@@ -94,7 +94,7 @@ function TaskAddFormProto() {
         ) : (
           <ErrorDialog info="Что-то пошло не так" redirect={navigate} homePath={PATH_LIST.ROOT} />
         )}
-      </CustomLoader>
+      </Loader>
     </StyledFormWrapperBox>
   );
 }

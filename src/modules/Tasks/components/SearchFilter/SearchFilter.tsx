@@ -16,7 +16,7 @@ export function SearchFilter({ onChange, selectTypeTask }: ISearchFilterProps) {
       {Object.values(FILTER_TYPES).map((type) => (
         <SearchButton
           key={type}
-          variant="contained"
+          variant={selectTypeTask === type ? 'contained' : 'outlined'}
           color={selectTypeTask === type ? FILTER_CLASSES.ACTIVE : FILTER_CLASSES.NOT_ACTIVE}>
           {type}
         </SearchButton>

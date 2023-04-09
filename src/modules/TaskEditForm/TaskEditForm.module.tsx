@@ -10,7 +10,7 @@ import { editFormValidationSchema } from './TaskEditForm.validation';
 import { CheckboxWrapper } from './components/index';
 import { StyledEditForm, StyledFormWrapperBox } from './TaskEditForm.styled';
 import { TaskEditEntity } from 'domains/index';
-import { CustomTextField, CustomLoader, ErrorDialog } from 'components/index';
+import { CustomTextField, Loader, ErrorDialog } from 'components/index';
 import { PATH_LIST } from 'constants/index';
 
 function TaskEditFormProto() {
@@ -61,7 +61,7 @@ function TaskEditFormProto() {
 
   return (
     <StyledFormWrapperBox>
-      <CustomLoader isLoading={taskEditStoreInstance.isLoader}>
+      <Loader isLoading={taskEditStoreInstance.isLoader}>
         {taskEditStoreInstance.taskId ? (
           <StyledEditForm>
             <Controller
@@ -109,7 +109,7 @@ function TaskEditFormProto() {
         ) : (
           <ErrorDialog info="Что-то пошло не так" redirect={navigate} homePath={PATH_LIST.ROOT} />
         )}
-      </CustomLoader>
+      </Loader>
     </StyledFormWrapperBox>
   );
 }

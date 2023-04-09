@@ -1,5 +1,5 @@
 import { IconButton, ListItemText } from '@mui/material';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { TaskEntity } from 'domains/index';
 
@@ -16,16 +16,16 @@ export const StyledTaskBox = styled(Box)({
 
 export const StyledListItemText = styled(ListItemText, {
   shouldForwardProp: (prop) => prop !== 'isImportant' && prop !== 'isDone',
-})<StyledListItemTextProps>(({ isImportant, isDone }) => ({
+})<StyledListItemTextProps>(({ theme, isImportant, isDone }) => ({
   '& span': {
     wordBreak: 'break-word',
     ...(isImportant && {
-      color: '#198754',
+      color: theme.palette.success.main,
       fontWeight: '700',
     }),
     ...(isDone && {
       textDecoration: 'line-through',
-      color: '#6c757d',
+      color: theme.palette.grey[700],
     }),
   },
 }));
@@ -38,54 +38,54 @@ const buttonStyles = {
 
 export const StyledImportantButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== 'isImportant',
-})<StyledImportantButtonProps>(({ isImportant }) => ({
+})<StyledImportantButtonProps>(({ isImportant, theme }) => ({
   ...buttonStyles,
-  color: '#198754',
-  borderColor: '#198754',
+  color: theme.palette.success.main,
+  borderColor: theme.palette.success.main,
   ...(isImportant && {
     color: '#fff',
-    backgroundColor: '#198754',
+    backgroundColor: theme.palette.success.main,
   }),
 
   '&:hover': {
     color: '#fff',
-    backgroundColor: '#198754',
+    backgroundColor: theme.palette.success.main,
   },
 }));
 
 export const StyledCompletedButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== 'isDone',
-})<StyledCompletedButtonProps>(({ isDone }) => ({
+})<StyledCompletedButtonProps>(({ isDone, theme }) => ({
   ...buttonStyles,
-  color: '#dc3545',
-  borderColor: '#dc3545',
+  color: theme.palette.error.main,
+  borderColor: theme.palette.error.main,
   ...(isDone && {
     color: '#fff',
-    backgroundColor: '#dc3545',
+    backgroundColor: theme.palette.error.main,
   }),
 
   '&:hover': {
     color: '#fff',
-    backgroundColor: '#dc3545',
+    backgroundColor: theme.palette.error.main,
   },
 }));
 
-export const StyledDeleteButton = styled(IconButton)({
+export const StyledDeleteButton = styled(IconButton)(({ theme }) => ({
   ...buttonStyles,
-  color: '#dc3545',
-  borderColor: '#dc3545',
+  color: theme.palette.error.main,
+  borderColor: theme.palette.error.main,
   '&:hover': {
     color: '#fff',
-    backgroundColor: '#dc3545',
+    backgroundColor: theme.palette.error.main,
   },
-});
+}));
 
-export const StyledLinkButton = styled(IconButton)({
+export const StyledLinkButton = styled(IconButton)(({ theme }) => ({
   ...buttonStyles,
-  color: '#6c757d',
-  borderColor: '#6c757d',
+  color: theme.palette.grey[700],
+  borderColor: theme.palette.grey[700],
   '&:hover': {
     color: '#fff',
-    backgroundColor: '#6c757d',
+    backgroundColor: theme.palette.grey[700],
   },
-});
+}));

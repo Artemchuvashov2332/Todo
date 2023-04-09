@@ -4,13 +4,13 @@ import { Typography } from '@mui/material';
 import { Task } from '../index';
 import { taskStoreInstance } from '../../store/index';
 import { StyledList, StyledListItem, StyledTasksBox } from './TasksList.styled';
-import { CustomLoader } from 'components/index';
+import { Loader } from 'components/index';
 
 export const TasksListProto = () => {
   const { tasks, isLoader, changeTaskImportant, changeTaskCompleted, deleteTask } = taskStoreInstance;
   return (
     <StyledTasksBox>
-      <CustomLoader isLoading={isLoader}>
+      <Loader isLoading={isLoader}>
         {tasks?.length ? (
           <StyledList>
             {tasks.map((task) => (
@@ -30,7 +30,7 @@ export const TasksListProto = () => {
             Ничего не найдено
           </Typography>
         )}
-      </CustomLoader>
+      </Loader>
     </StyledTasksBox>
   );
 };
