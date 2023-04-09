@@ -102,7 +102,7 @@ function TaskEditFormProto() {
           и небыло перерендера всей формы */}
             <CheckboxWrapper control={control} onTaskImportant={onTaskImportant} onTaskCompleted={onTaskCompleted} />
 
-            <Button variant="contained" fullWidth onClick={onSubmitTaskFors}>
+            <Button variant="contained" fullWidth onClick={onSubmitTaskFors} disabled={taskEditStoreInstance.isLoader}>
               Edit task
             </Button>
           </StyledEditForm>

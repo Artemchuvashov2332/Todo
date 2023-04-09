@@ -87,7 +87,7 @@ function TaskAddFormProto() {
               )}
             />
 
-            <Button variant="contained" fullWidth onClick={onSubmitTaskFors}>
+            <Button variant="contained" fullWidth onClick={onSubmitTaskFors} disabled={taskAddStoreInstance.isLoader}>
               Add task
             </Button>
           </StyledAddForm>

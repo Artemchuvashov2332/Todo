@@ -12,11 +12,9 @@ export function TasksPage() {
         TODO LIST
       </Typography>
       <Tasks />
-      <Link to={PATH_LIST.ADD}>
-        <Button variant="contained" color="primary" fullWidth>
-          Add task
-        </Button>
-      </Link>
+      <Button component={Link} to={PATH_LIST.ADD} variant="contained" color="primary" fullWidth>
+        Add task
+      </Button>
     </PageContainer>
   );
 }
