@@ -107,9 +107,7 @@ function TaskEditFormProto() {
             </Button>
           </StyledEditForm>
         ) : (
-          <ErrorDialog redirect={navigate} homePath={PATH_LIST.ROOT}>
-            Что-то пошло не так
-          </ErrorDialog>
+          <ErrorDialog info="Что-то пошло не так" redirect={navigate} homePath={PATH_LIST.ROOT} />
         )}
       </CustomLoader>
     </StyledFormWrapperBox>

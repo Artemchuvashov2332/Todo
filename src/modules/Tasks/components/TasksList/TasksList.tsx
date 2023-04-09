@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Typography } from '@mui/material';
-import { Task } from '../Task/index';
+import { Task } from '../index';
 import { taskStoreInstance } from '../../store/index';
 import { StyledList, StyledListItem, StyledTasksBox } from './TasksList.styled';
 import { CustomLoader } from 'components/index';

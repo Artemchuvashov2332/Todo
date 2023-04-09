@@ -1,6 +1,5 @@
-import { PropsWithChildren } from 'react';
-
-export interface IErrorDialog extends PropsWithChildren {
+export interface IErrorDialog {
+  info?: string;
   homePath?: string;
   redirect?: (path: string) => void;
 }

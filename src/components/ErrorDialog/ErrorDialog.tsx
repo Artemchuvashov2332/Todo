@@ -1,7 +1,9 @@
 import React from 'react';
+import { Box, Typography, Stack } from '@mui/material';
 import { IErrorDialog } from './ErrorDialog.types';
+import { StyledDiallogButton } from './ErrorDiagol.styled';
 
-export function ErrorDialog({ homePath, redirect, children }: IErrorDialog) {
+export function ErrorDialog({ info, homePath, redirect }: IErrorDialog) {
   const onClickThisHandler = () => window.location.reload();
 
   const onClickHomeHandler = () => {
@@ -9,18 +11,20 @@ export function ErrorDialog({ homePath, redirect, children }: IErrorDialog) {
   };
 
   return (
-    <div className="text-center fs-3">
-      {children}
-      <div>
-        <button className="w-100 my-1 btn btn-danger" onClick={onClickThisHandler}>
+    <Stack>
+      <Typography component="h3" variant="h5" align="center">
+        {info}
+      </Typography>
+      <Box mt={8}>
+        <StyledDiallogButton variant="contained" fullWidth color="error" onClick={onClickThisHandler}>
           Попробовать ещё раз
-        </button>
+        </StyledDiallogButton>
         {homePath && redirect && (
-          <button className="w-100 my-1 btn btn-primary" onClick={onClickHomeHandler}>
+          <StyledDiallogButton variant="contained" fullWidth color="primary" onClick={onClickHomeHandler}>
             На главную
-          </button>
+          </StyledDiallogButton>
         )}
-      </div>
-    </div>
+      </Box>
+    </Stack>
   );
 }

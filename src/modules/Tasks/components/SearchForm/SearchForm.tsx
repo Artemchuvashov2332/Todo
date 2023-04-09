@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 import { observer } from 'mobx-react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
-import { SearchFilter } from '../SearchFilter/index';
+import { SearchFilter } from '../index';
 import { taskStoreInstance } from '../../store/index';
 import { SEARCH_FORM_DEFAULT_VALUES } from './SearchForm.constants';
 import { StyledSearchForm } from './SearchForm.styled';
