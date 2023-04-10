@@ -31,7 +31,7 @@ export const TasksListProto = () => {
           </Typography>
         )}
         {isError && (
-          <Snackbar open={isError} autoHideDuration={6000}>
+          <Snackbar open={isError}>
             <Alert severity="error">Оооййй-ёёйй что-то пошло не так</Alert>
           </Snackbar>
         )}

@@ -59,6 +59,7 @@ class TaskStore {
   loadTasks = async (query?: ISearchForm) => {
     try {
       this._isLoader = true;
+      this._isError = false;
 
       const externalParam = mapToExternalParams(query);
       const tasks = await taskAgentInstance.getAllTasks(externalParam);
@@ -82,6 +83,8 @@ class TaskStore {
   changeTaskImportant = async (id: TaskEntity['id'], currentStatus: boolean) => {
     try {
       this._isLoader = true;
+      this._isError = false;
+
       await taskAgentInstance.patchTask(id, {
         isImportant: !currentStatus,
       });
@@ -96,6 +99,8 @@ class TaskStore {
   changeTaskCompleted = async (id: TaskEntity['id'], currentStatus: boolean) => {
     try {
       this._isLoader = true;
+      this._isError = false;
+
       await taskAgentInstance.patchTask(id, {
         isImportant: false,
         isCompleted: !currentStatus,
@@ -111,6 +116,8 @@ class TaskStore {
   deleteTask = async (id: string) => {
     try {
       this._isLoader = true;
+      this._isError = false;
+
       await taskAgentInstance.deleteTask(id);
       await this.loadTasks(this._currentSearchForm);
     } catch (error) {
