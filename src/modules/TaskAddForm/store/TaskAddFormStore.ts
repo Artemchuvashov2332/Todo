@@ -31,7 +31,7 @@ class TaskAddFormStore {
 
   postTask = async (task: TaskAddEntity) => {
     try {
-      this._isLoader = false;
+      this._isLoader = true;
       const externalTask = mapToExtermalTask({ ...task, isDone: false });
       await taskAgentInstance.postTask(externalTask);
       return true;

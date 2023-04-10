@@ -1,13 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Typography } from '@mui/material';
+import { Typography, Alert, Snackbar } from '@mui/material';
 import { Task } from '../index';
 import { taskStoreInstance } from '../../store/index';
 import { StyledList, StyledListItem, StyledTasksBox } from './TasksList.styled';
 import { Loader } from 'components/index';
 
 export const TasksListProto = () => {
-  const { tasks, isLoader, changeTaskImportant, changeTaskCompleted, deleteTask } = taskStoreInstance;
+  const { tasks, isLoader, isError, changeTaskImportant, changeTaskCompleted, deleteTask } = taskStoreInstance;
   return (
     <StyledTasksBox>
       <Loader isLoading={isLoader}>
@@ -29,6 +29,11 @@ export const TasksListProto = () => {
           <Typography component="p" variant="h5">
             Ничего не найдено
           </Typography>
+        )}
+        {isError && (
+          <Snackbar open={isError} autoHideDuration={6000}>
+            <Alert severity="error">Оооййй-ёёйй что-то пошло не так</Alert>
+          </Snackbar>
         )}
       </Loader>
     </StyledTasksBox>

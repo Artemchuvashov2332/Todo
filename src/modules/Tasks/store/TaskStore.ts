@@ -4,7 +4,7 @@ import { getInternalTasksStats, mapToExternalParams, mapToInterlanTasks } from '
 import { taskAgentInstance } from 'http/index';
 import { FILTER_TYPES } from 'constants/index';
 
-type TaskStoreField = '_isLoader' | '_tasks' | '_tasksStats' | '_currentSearchForm';
+type TaskStoreField = '_isLoader' | '_tasks' | '_tasksStats' | '_currentSearchForm' | '_isError';
 
 class TaskStore {
   constructor() {
@@ -13,10 +13,12 @@ class TaskStore {
       _tasks: observable,
       _tasksStats: observable,
       _currentSearchForm: observable,
+      _isError: observable,
 
       isLoader: computed,
       tasks: computed,
       tasksStats: computed,
+      isError: computed,
 
       loadTasks: action,
       changeTaskImportant: action,
@@ -25,13 +27,14 @@ class TaskStore {
     });
   }
 
-  private _isLoader = false;
+  private _isLoader = true;
   private _tasks: TaskEntity[] | null = [];
   private _tasksStats: TasksStatsEntity | null = {
     total: 0,
     important: 0,
     done: 0,
   };
+  private _isError = false;
   private _currentSearchForm: ISearchForm = {
     searchInputValue: '',
     filterType: FILTER_TYPES.ALL,
@@ -47,6 +50,10 @@ class TaskStore {
 
   get tasksStats() {
     return this._tasksStats;
+  }
+
+  get isError() {
+    return this._isError;
   }
 
   loadTasks = async (query?: ISearchForm) => {
@@ -66,6 +73,7 @@ class TaskStore {
     } catch (error) {
       this._tasks = null;
       this._tasksStats = null;
+      this._isError = true;
     } finally {
       this._isLoader = false;
     }
@@ -79,8 +87,7 @@ class TaskStore {
       });
       await this.loadTasks(this._currentSearchForm);
     } catch (error) {
-      this._tasks = null;
-      this._tasksStats = null;
+      this._isError = true;
     } finally {
       this._isLoader = false;
     }
@@ -95,8 +102,7 @@ class TaskStore {
       });
       await this.loadTasks(this._currentSearchForm);
     } catch (error) {
-      this._tasks = null;
-      this._tasksStats = null;
+      this._isError = true;
     } finally {
       this._isLoader = false;
     }
@@ -108,8 +114,7 @@ class TaskStore {
       await taskAgentInstance.deleteTask(id);
       await this.loadTasks(this._currentSearchForm);
     } catch (error) {
-      this._tasks = null;
-      this._tasksStats = null;
+      this._isError = true;
     } finally {
       this._isLoader = false;
     }

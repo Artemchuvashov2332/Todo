@@ -8,8 +8,7 @@ import {
 
 class TaskAgent extends BasicAgent {
   constructor() {
-    //НЕ ЗАБУДЬ ПОМЕНЯТЬ НА .env
-    super(process.env.APP_API_LIGA as string); //undefined
+    super(process.env.APP_API_LIGA as string);
   }
 
   getAllTasks = async (params?: GetAllTasksQueryParams): Promise<GetAllTasksQueryResponse> => {

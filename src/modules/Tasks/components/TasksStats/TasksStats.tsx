@@ -30,7 +30,7 @@ const TasksStatsProto = () => {
             </>
           ) : (
             <Typography component="p" variant="body1">
-              Ооооооооййёёёёёёёёёй!
+              Ничего не найдено
             </Typography>
           )}
         </>

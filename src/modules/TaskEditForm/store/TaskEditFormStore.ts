@@ -21,7 +21,7 @@ class TaskEditFormStore {
     });
   }
 
-  private _isLoader = false;
+  private _isLoader = true;
   private _taskId: string | null = null;
   private _taskFormData: TaskEditEntity = {
     name: '',
