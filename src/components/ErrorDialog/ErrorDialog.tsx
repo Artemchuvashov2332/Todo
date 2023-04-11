@@ -4,10 +4,10 @@ import { IErrorDialog } from './ErrorDialog.types';
 import { StyledDiallogButton } from './ErrorDiagol.styled';
 
 export function ErrorDialog({ info, homePath, redirect }: IErrorDialog) {
-  const onClickThisHandler = () => window.location.reload();
+  const onClickThisHandler = () => redirect(0);
 
   const onClickHomeHandler = () => {
-    if (redirect && homePath) redirect(homePath);
+    if (homePath) redirect(homePath);
   };
 
   return (
@@ -19,7 +19,7 @@ export function ErrorDialog({ info, homePath, redirect }: IErrorDialog) {
         <StyledDiallogButton variant="contained" fullWidth color="error" onClick={onClickThisHandler}>
           Попробовать ещё раз
         </StyledDiallogButton>
-        {homePath && redirect && (
+        {homePath && (
           <StyledDiallogButton variant="contained" fullWidth color="primary" onClick={onClickHomeHandler}>
             На главную
           </StyledDiallogButton>

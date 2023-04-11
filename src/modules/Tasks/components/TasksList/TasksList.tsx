@@ -32,7 +32,7 @@ export const TasksListProto = () => {
         )}
         {isError && (
           <Snackbar open={isError}>
-            <Alert severity="error">Оооййй-ёёйй что-то пошло не так</Alert>
+            <Alert severity="error">Оооййй-ёёйй что-то пошло не так. Попробуйте обновить страницу</Alert>
           </Snackbar>
         )}
       </Loader>

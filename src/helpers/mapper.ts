@@ -1,5 +1,5 @@
 import { FILTER_TYPES } from 'constants/index';
-import { ISearchForm, TaskAddEntity, TaskEditEntity, TaskEntity, TasksStatsEntity } from 'domains/index';
+import { ISearchForm, TaskEditEntity, TaskEntity, TasksStatsEntity } from 'domains/index';
 import {
   GetAllTasksQueryParams,
   GetAllTasksQueryResponse,
